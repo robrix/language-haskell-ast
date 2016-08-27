@@ -13,3 +13,6 @@ main = do
     ParseFailed loc reason -> print $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST = AST { loc :: SrcLoc, name :: String, children :: AST }
+
+class IsAST t where
+  toAST :: t -> AST
