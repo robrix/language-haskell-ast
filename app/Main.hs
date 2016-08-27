@@ -27,6 +27,13 @@ instance IsAST (ModuleHead SrcSpanInfo) where
   toAST (ModuleHead l _ _ _) = AST (srcInfoSpan l) "module_head" []
 
 
+data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
+  deriving (Eq, Show)
+
+spanToRange :: SrcSpan -> SrcRange
+spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
+
+
 class IsAST t where
   toAST :: t -> AST
   default toAST :: (Generic t, IsAST' (Rep t)) => t -> AST
