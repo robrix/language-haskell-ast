@@ -17,7 +17,7 @@ main = do
     ParseOk m -> putStrLn $ "parse succeeded: " <> show (toAST (spanToRange . srcInfoSpan <$> m))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
-data AST = AST { astLoc :: SrcRange, astName :: String, astChildren :: [AST] }
+data AST = AST { astRange :: SrcRange, astName :: String, astChildren :: [AST] }
   deriving (Eq, Show)
 
 instance IsAST (Module SrcRange) where
