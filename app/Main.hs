@@ -26,7 +26,11 @@ instance IsAST (Module SrcRange) where
   toAST (Module l header _ _ _) = Branch l "program" (toAST <$> maybeToList header)
 
 instance IsAST (ModuleHead SrcRange) where
-  toAST (ModuleHead l name _ _) = Branch l "module_head" [ toAST name ]
+  toAST (ModuleHead l name warning exportSpecList) = Branch l "module_head" $ toAST name : (toAST <$> maybeToList warning)
+
+instance IsAST (WarningText SrcRange) where
+  toAST (DeprText l t) = Leaf l "deprecation" t
+  toAST (WarnText l t) = Leaf l "warning" t
 
 instance IsAST (ModuleName SrcRange) where
   toAST (ModuleName l s) = Leaf l "identifier" s
