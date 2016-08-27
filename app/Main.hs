@@ -24,8 +24,10 @@ instance IsAST (Module SrcRange) where
   toAST (Module l header _ _ _) = AST l "program" (toAST <$> maybeToList header)
 
 instance IsAST (ModuleHead SrcRange) where
-  toAST (ModuleHead l _ _ _) = AST l "module_head" []
+  toAST (ModuleHead l name _ _) = AST l "module_head" [ toAST name ]
 
+instance IsAST (ModuleName SrcRange) where
+  toAST (ModuleName l s) = AST l "identifier" []
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
   deriving (Eq, Show)
