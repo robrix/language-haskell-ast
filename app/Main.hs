@@ -22,6 +22,9 @@ data AST = AST { astLoc :: SrcSpan, astName :: String, astChildren :: [AST] }
 instance IsAST (Module SrcSpanInfo) where
   toAST (Module l header _ _ _) = AST (srcInfoSpan l) "program" []
 
+instance IsAST (ModuleHead SrcSpanInfo) where
+  toAST (ModuleHead l _ _ _) = AST (srcInfoSpan l) "module_head" []
+
 
 class IsAST t where
   toAST :: t -> AST
