@@ -51,3 +51,6 @@ class IsAST' t where
 
 toASTGeneric :: (Generic t, IsAST' (Rep t)) => t -> AST String
 toASTGeneric = toAST' . from
+
+instance IsAST' f => IsAST' (M1 i c f) where
+  toAST' = toAST' . unM1
