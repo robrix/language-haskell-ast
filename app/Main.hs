@@ -46,3 +46,6 @@ class IsAST t where
 
 class IsAST' t where
   toAST' :: t a -> AST
+
+toASTGeneric :: (Generic t, IsAST' (Rep t)) => t -> AST String
+toASTGeneric = toAST' . from
