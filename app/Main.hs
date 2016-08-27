@@ -20,7 +20,7 @@ data AST = AST { astLoc :: SrcSpan, astName :: String, astChildren :: [AST] }
   deriving (Eq, Show)
 
 instance IsAST (Module SrcSpanInfo) where
-  toAST m@(Module l _ _ _ _) = AST (srcInfoSpan l) "program" []
+  toAST (Module l header _ _ _) = AST (srcInfoSpan l) "program" []
 
 
 class IsAST t where
