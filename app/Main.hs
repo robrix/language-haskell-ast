@@ -13,7 +13,7 @@ main :: IO ()
 main = do
   result <- parseFile path
   case result of
-    ParseOk m -> print "parse succeeded"
+    ParseOk m -> print $ "parse succeeded: " <> show (toAST m)
     ParseFailed loc reason -> print $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST = AST { astLoc :: SrcSpanInfo, astName :: String, astChildren :: [AST] }
