@@ -30,11 +30,14 @@ instance IsAST (ModuleName SrcRange) where
   toAST (ModuleName l s) = AST l "identifier" []
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
-  deriving (Eq, Show)
+  deriving (Eq)
 
 spanToRange :: SrcSpan -> SrcRange
 spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
 
+
+instance Show SrcRange where
+  showsPrec _ (SrcRange sl sc el ec) = showParen True $ shows sl . showString ":" . shows sc . showString "-" . shows el . showString ":" . shows ec
 
 class IsAST t where
   toAST :: t -> AST
