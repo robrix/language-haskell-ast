@@ -14,17 +14,17 @@ main :: IO ()
 main = do
   result <- parseFile path
   case result of
-    ParseOk m -> putStrLn $ "parse succeeded: " <> show (toAST m)
+    ParseOk m -> putStrLn $ "parse succeeded: " <> show (toAST (spanToRange . srcInfoSpan <$> m))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
-data AST = AST { astLoc :: SrcSpan, astName :: String, astChildren :: [AST] }
+data AST = AST { astLoc :: SrcRange, astName :: String, astChildren :: [AST] }
   deriving (Eq, Show)
 
-instance IsAST (Module SrcSpanInfo) where
-  toAST (Module l header _ _ _) = AST (srcInfoSpan l) "program" (toAST <$> maybeToList header)
+instance IsAST (Module SrcRange) where
+  toAST (Module l header _ _ _) = AST l "program" (toAST <$> maybeToList header)
 
-instance IsAST (ModuleHead SrcSpanInfo) where
-  toAST (ModuleHead l _ _ _) = AST (srcInfoSpan l) "module_head" []
+instance IsAST (ModuleHead SrcRange) where
+  toAST (ModuleHead l _ _ _) = AST l "module_head" []
 
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
