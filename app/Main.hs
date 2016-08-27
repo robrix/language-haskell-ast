@@ -24,7 +24,7 @@ data AST a
   deriving (Eq, Show)
 
 instance IsAST Module where
-  toAST (Module l header pragmas _ _) = Branch l "program" $ (toAST <$> maybeToList header) <> (toAST <$> pragmas)
+  toAST (Module l header pragmas imports _) = Branch l "program" $ (toAST <$> maybeToList header) <> (toAST <$> pragmas) <> (toAST <$> imports)
 
 instance IsAST ModuleHead where
   toAST (ModuleHead l name warning exportSpecList) = Branch l "module_head" $ toAST name : (toAST <$> maybeToList warning) <> (toAST <$> maybeToList exportSpecList)
@@ -78,6 +78,18 @@ instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
   toAST (TypeAnn l name e) = Branch l "type_annotation" [ toAST name{-, toAST e -} ]
   toAST (ModuleAnn l e) = Branch l "module_annotation" [ {- toAST e -} ]
+
+instance IsAST ImportDecl where
+  toAST (ImportDecl l m _ _ _ _ as importSpecList) = Branch l "import_declaration" $ toAST m : (toAST <$> maybeToList as) <> (toAST <$> maybeToList importSpecList)
+
+instance IsAST ImportSpecList where
+  toAST (ImportSpecList l _ specs) = Branch l "import_specs" $ toAST <$> specs
+
+instance IsAST ImportSpec where
+  toAST (IVar _ name) = toAST name
+  toAST (IAbs _ _ name) = toAST name
+  toAST (IThingAll _ name) = toAST name
+  toAST (IThingWith l name names) = Branch l "import_spec" $ toAST name : (toAST <$> names)
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
   deriving (Eq)
