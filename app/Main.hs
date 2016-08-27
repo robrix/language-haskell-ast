@@ -24,7 +24,7 @@ data AST a
   deriving (Eq, Show)
 
 instance IsAST (Module SrcRange) where
-  toAST (Module l header _ _ _) = Branch l "program" (toAST <$> maybeToList header)
+  toAST (Module l header pragmas _ _) = Branch l "program" $ (toAST <$> maybeToList header) <> (toAST <$> pragmas)
 
 instance IsAST (ModuleHead SrcRange) where
   toAST (ModuleHead l name warning exportSpecList) = Branch l "module_head" $ toAST name : (toAST <$> maybeToList warning) <> (toAST <$> maybeToList exportSpecList)
@@ -61,6 +61,16 @@ instance IsAST (Name SrcRange) where
 
 instance IsAST (ModuleName SrcRange) where
   toAST (ModuleName l s) = Leaf l "identifier" s
+
+instance IsAST (ModulePragma SrcRange) where
+  toAST (LanguagePragma l names) = Branch l "language_pragma" $ toAST <$> names
+  toAST (OptionsPragma l _ s) = Leaf l "options_pragma" s
+  toAST (AnnModulePragma l annotation) = Branch l "annotation_pragma" $ pure (toAST annotation)
+
+instance IsAST (Annotation SrcRange) where
+  toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
+  toAST (TypeAnn l name e) = Branch l "type_annotation" [ toAST name{-, toAST e -} ]
+  toAST (ModuleAnn l e) = Branch l "module_annotation" [ {- toAST e -} ]
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
   deriving (Eq)
