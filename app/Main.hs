@@ -6,6 +6,7 @@ import GHC.Generics
 import Language.Haskell.Exts
 import Language.Haskell.Exts.SrcLoc
 import Language.Haskell.Exts.Syntax
+import Data.Maybe
 
 path = "/Users/rob/Developer/Projects/language-haskell-ast/app/Main.hs"
 
@@ -20,7 +21,7 @@ data AST = AST { astLoc :: SrcSpan, astName :: String, astChildren :: [AST] }
   deriving (Eq, Show)
 
 instance IsAST (Module SrcSpanInfo) where
-  toAST (Module l header _ _ _) = AST (srcInfoSpan l) "program" []
+  toAST (Module l header _ _ _) = AST (srcInfoSpan l) "program" (toAST <$> maybeToList header)
 
 instance IsAST (ModuleHead SrcSpanInfo) where
   toAST (ModuleHead l _ _ _) = AST (srcInfoSpan l) "module_head" []
