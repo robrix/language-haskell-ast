@@ -11,3 +11,5 @@ main = do
   case result of
     ParseOk m -> print "parse succeeded"
     ParseFailed loc reason -> print $ "parse failed at " <> show loc <> " because " <> reason
+
+data AST = AST { loc :: SrcLoc, name :: String, children :: AST }
