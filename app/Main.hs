@@ -1,6 +1,13 @@
 module Main where
 
-import Language.Haskell.Exts.Syntax
+import Data.Monoid
+import Language.Haskell.Exts
+
+path = "/Users/rob/Developer/Projects/language-haskell-ast/app/Main.hs"
 
 main :: IO ()
-main = print "hello"
+main = do
+  result <- parseFile path
+  case result of
+    ParseOk m -> print "parse succeeded"
+    ParseFailed loc reason -> print $ "parse failed at " <> show loc <> " because " <> reason
