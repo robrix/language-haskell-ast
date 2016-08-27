@@ -29,7 +29,7 @@ instance IsAST (ModuleHead SrcRange) where
   toAST (ModuleHead l name _ _) = Branch l "module_head" [ toAST name ]
 
 instance IsAST (ModuleName SrcRange) where
-  toAST (ModuleName l s) = Branch l "identifier" []
+  toAST (ModuleName l s) = Leaf l "identifier" s
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
   deriving (Eq)
