@@ -15,6 +15,7 @@ main = do
     ParseFailed loc reason -> print $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST = AST { astLoc :: SrcSpanInfo, astName :: String, astChildren :: [AST] }
+  deriving (Eq, Show)
 
 class IsAST t where
   toAST :: t -> AST
