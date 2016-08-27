@@ -16,11 +16,11 @@ main = do
     ParseOk m -> putStrLn $ "parse succeeded: " <> show (toAST m)
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
-data AST = AST { astLoc :: SrcSpanInfo, astName :: String, astChildren :: [AST] }
+data AST = AST { astLoc :: SrcSpan, astName :: String, astChildren :: [AST] }
   deriving (Eq, Show)
 
 instance IsAST (Module SrcSpanInfo) where
-  toAST m@(Module l _ _ _ _) = AST l "program" []
+  toAST m@(Module l _ _ _ _) = AST (srcInfoSpan l) "program" []
 
 
 class IsAST t where
