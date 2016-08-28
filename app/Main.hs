@@ -61,7 +61,7 @@ instance Pretty SrcRange where
   pPrint (SrcRange sl sc el ec) = text $ "[" <> show sl <> ":" <> show sc <> "-" <> show el <> ":" <> show ec <> "]"
 
 instance Pretty (AST String) where
-  pPrint (Leaf l name contents) = parens $ text ('\'' : name) <+> pPrint l <+> text (show contents)
+  pPrint (Leaf l name contents) = parens $ text name <+> pPrint l <+> text (show contents)
   pPrint (Branch l name children) = parens $ text name <+> pPrint l <+> sep (pPrint <$> children)
 
 class IsAST t where
