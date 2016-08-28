@@ -115,9 +115,9 @@ instance Pretty SrcRange where
   pPrint (SrcRange sl sc el ec) = text $ "[" <> show sl <> ":" <> show sc <> "-" <> show el <> ":" <> show ec <> "]"
 
 instance Pretty (AST String) where
-  pPrint ast = case ast of
-    Leaf{..} -> parens $ text astName <+> pPrint astRange <+> text (show astContents)
-    Branch{..} -> parens $ text astName <+> pPrint astRange <+> sep (pPrint <$> astChildren)
+  pPrint ast = parens $ text (astName ast) <+> pPrint (astRange ast) <+> case ast of
+    Leaf{..} -> text (show astContents)
+    Branch{..} -> sep (pPrint <$> astChildren)
 
 class IsAST t where
   toAST :: t SrcRange -> AST String
