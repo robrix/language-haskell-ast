@@ -55,11 +55,7 @@ instance IsAST SpecialCon where
 
 instance IsAST Name
 instance IsAST ModuleName
-
-instance IsAST ModulePragma where
-  toAST (LanguagePragma l names) = Branch l "language_pragma" $ toAST <$> names
-  toAST (OptionsPragma l _ s) = Leaf l "options_pragma" s
-  toAST (AnnModulePragma l annotation) = Branch l "annotation_pragma" $ pure (toAST annotation)
+instance IsAST ModulePragma
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
