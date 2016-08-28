@@ -30,6 +30,7 @@ instance IsAST WarningText
 instance IsAST ExportSpecList
 instance IsAST Namespace
 instance IsAST ExportSpec
+instance IsAST EWildcard
 instance IsAST QName
 instance IsAST CName
 instance IsAST SpecialCon
