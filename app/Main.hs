@@ -160,6 +160,7 @@ instance Selector s => IsAST' (S1 s (Rec0 Int))
 instance Selector s => IsAST' (S1 s (Rec0 (a, b)))
 instance Selector s => IsAST' (S1 s (Rec0 Integer))
 instance Selector s => IsAST' (S1 s (Rec0 Boxed))
+instance Selector s => IsAST' (S1 s (Rec0 (Maybe Int)))
 instance Selector s => IsAST' (S1 s (Rec0 (Maybe Tool)))
 instance Selector s => IsAST' (S1 s (Rec0 (Maybe String)))
 
