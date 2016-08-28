@@ -45,6 +45,7 @@ instance IsAST Unpackedness
 instance IsAST BangType
 instance IsAST IPName
 instance IsAST DeclHead
+instance IsAST XName
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
