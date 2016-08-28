@@ -63,9 +63,7 @@ instance IsAST Annotation where
 instance IsAST ImportDecl where
   toAST (ImportDecl l m _ _ _ _ as importSpecList) = Branch l "import_declaration" $ toAST m : (toAST <$> maybeToList as) <> (toAST <$> maybeToList importSpecList)
 
-instance IsAST ImportSpecList where
-  toAST (ImportSpecList l _ specs) = Branch l "import_specs" $ toAST <$> specs
-
+instance IsAST ImportSpecList
 instance IsAST ImportSpec
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
