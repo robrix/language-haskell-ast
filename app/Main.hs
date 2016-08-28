@@ -41,6 +41,7 @@ instance IsAST ModuleName
 instance IsAST ModulePragma
 instance IsAST TyVarBind
 instance IsAST Kind
+instance IsAST Unpackedness
 instance IsAST BangType
 instance IsAST IPName
 
