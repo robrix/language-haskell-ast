@@ -41,6 +41,7 @@ instance IsAST ModuleName
 instance IsAST ModulePragma
 instance IsAST TyVarBind
 instance IsAST Kind
+instance IsAST BangType
 instance IsAST IPName
 
 instance IsAST Annotation where
