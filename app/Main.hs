@@ -128,6 +128,10 @@ instance Constructor c => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Str
   toAST' m = Leaf (location m) (conName m) $ unK1 . unM1 . r . unM1 $ m
     where r (_ :*: r) = r
 
+instance (Constructor c, IsAST v) => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 (v SrcRange))))) where
+  toAST' m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
+    where r (_ :*: r) = r
+
 instance (IsAST'' g, IsAST'' h, Constructor c) => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (g :*: h))) where
   toAST' m = case toAST'' (r (unM1 m)) of
     [ a ] | astRange a == location m -> a
