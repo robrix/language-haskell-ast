@@ -10,6 +10,7 @@ import Language.Haskell.Exts.SrcLoc
 import Language.Haskell.Exts.Syntax
 import Text.PrettyPrint.HughesPJClass hiding ((<>))
 
+path :: String
 path = "/Users/rob/Developer/Projects/language-haskell-ast/app/Main.hs"
 
 main :: IO ()
