@@ -142,8 +142,8 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
 instance (IsAST v, Selector s, Functor t, Foldable t) => IsAST' (S1 s (Rec0 (t (v SrcRange)))) where
   toAST' = toList . fmap toAST . unK1 . unM1
 
-instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe [v SrcRange]))) where
-  toAST' = fmap toAST . join . maybeToList . unK1 . unM1
+instance (IsAST v, Selector s, Functor t, Foldable t, Functor u, Foldable u) => IsAST' (S1 s (Rec0 (t (u (v SrcRange))))) where
+  toAST' = join . toList . fmap (toList . fmap toAST) . unK1 . unM1
 
 instance Selector s => IsAST' (S1 s (Rec0 SrcRange))
 instance Selector s => IsAST' (S1 s (Rec0 String))
