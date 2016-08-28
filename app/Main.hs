@@ -59,6 +59,8 @@ class IsAST' t where
   toAST' _ = []
 
 
+-- Instances
+
 instance IsAST Module
 instance IsAST ModuleHead
 instance IsAST WarningText
