@@ -101,24 +101,23 @@ instance (IsLocated f, IsAST f, Datatype c) => IsAST (M1 D c f) where
 
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 String)))) where
   toAST m = Leaf (location m) (conName m) $ unK1 . unM1 . r . unM1 $ m
-    where r (_ :*: r) = r
 
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
   toAST m = Branch (location m) (conName m) []
 
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (v SrcRange))))) where
   toAST m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
-    where r (_ :*: r) = r
 
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 [v SrcRange])))) where
   toAST m = Branch (location m) (conName m) $ fmap toAST . unK1 . unM1 . r . unM1 $ m
-    where r (_ :*: r) = r
 
 instance (IsLocated l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: (g :*: h))) where
   toAST m = case toAST' (r (unM1 m)) of
     [ a ] | astRange a == location m -> a
     as -> Branch (location m) (conName m) as
-    where r (_ :*: r) = r
+
+r :: (l :*: r) a -> r a
+r (_ :*: r) = r
 
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
   toAST' = pure . toAST . unK1 . unM1
