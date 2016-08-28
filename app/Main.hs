@@ -60,6 +60,7 @@ instance IsAST Assoc
 instance IsAST QOp
 instance IsAST Literal
 instance IsAST Sign
+instance IsAST Role
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
