@@ -51,6 +51,7 @@ instance IsAST BooleanFormula
 instance IsAST InjectivityInfo
 instance IsAST ResultSig
 instance IsAST Op
+instance IsAST DataOrNew
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
