@@ -34,6 +34,15 @@ data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !In
 spanToRange :: SrcSpan -> SrcRange
 spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
 
+l :: (l :*: r) a -> l a
+l (l :*: _) = l
+
+r :: (l :*: r) a -> r a
+r (_ :*: r) = r
+
+inlr :: (l a -> b) -> (r a -> b) -> (l :+: r) a -> b
+inlr f g s = case s of { L1 l -> f l ; R1 r -> g r }
+
 
 -- Typeclasses
 
@@ -172,15 +181,6 @@ instance (IsLocated l, IsAST' l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1
   toAST m = case toAST' (unM1 m) of
     [ a ] | astRange a == location m -> a
     as -> Branch (location m) (conName m) as
-
-l :: (l :*: r) a -> l a
-l (l :*: _) = l
-
-r :: (l :*: r) a -> r a
-r (_ :*: r) = r
-
-inlr :: (l a -> b) -> (r a -> b) -> (l :+: r) a -> b
-inlr f g s = case s of { L1 l -> f l ; R1 r -> g r }
 
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
   toAST' = pure . toAST . unK1 . unM1
