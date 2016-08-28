@@ -115,7 +115,7 @@ instance Pretty SrcRange where
   pPrint (SrcRange sl sc el ec) = text $ "[" <> show sl <> ":" <> show sc <> "-" <> show el <> ":" <> show ec <> "]"
 
 instance Pretty (AST String) where
-  pPrintPrec level _ ast = parens $ text (astName ast) <+> if level > prettyNormal then pPrint (astRange ast) else mempty <+> case ast of
+  pPrintPrec level n ast = parens $ text (astName ast) <+> if level > prettyNormal then pPrintPrec level n (astRange ast) else mempty <+> case ast of
     Leaf{..} -> text (show astContents)
     Branch{..} -> sep (pPrint <$> astChildren)
 
