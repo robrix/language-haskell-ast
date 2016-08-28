@@ -86,6 +86,7 @@ class IsLocated t where
 
 class IsAST' t where
   toAST' :: t SrcRange -> [AST String]
+  toAST' _ = []
 
 toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
 toASTGeneric = toAST . from
@@ -128,17 +129,10 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 [v SrcRange])) where
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe (v SrcRange)))) where
   toAST' = fmap toAST . maybeToList . unK1 . unM1
 
-instance Selector s => IsAST' (S1 s (Rec0 String)) where
-  toAST' _ = []
-
-instance Selector s => IsAST' (S1 s (Rec0 Bool)) where
-  toAST' _ = []
-
-instance Selector s => IsAST' (S1 s (Rec0 (Maybe Tool))) where
-  toAST' _ = []
-
-instance Selector s => IsAST' (S1 s (Rec0 (Maybe String))) where
-  toAST' _ = []
+instance Selector s => IsAST' (S1 s (Rec0 String))
+instance Selector s => IsAST' (S1 s (Rec0 Bool))
+instance Selector s => IsAST' (S1 s (Rec0 (Maybe Tool)))
+instance Selector s => IsAST' (S1 s (Rec0 (Maybe String)))
 
 instance (IsAST' f, IsAST' g) => IsAST' (f :*: g) where
   toAST' (f :*: g) = toAST' f <> toAST' g
