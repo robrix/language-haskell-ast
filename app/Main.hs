@@ -41,6 +41,7 @@ instance IsAST ModuleName
 instance IsAST ModulePragma
 instance IsAST TyVarBind
 instance IsAST Kind
+instance IsAST IPName
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
