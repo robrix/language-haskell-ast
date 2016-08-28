@@ -6,8 +6,6 @@ import Data.Maybe
 import Data.Monoid
 import GHC.Generics
 import Language.Haskell.Exts hiding (Pretty)
-import Language.Haskell.Exts.SrcLoc
-import Language.Haskell.Exts.Syntax
 import Text.PrettyPrint.HughesPJClass hiding ((<>))
 
 path :: String
