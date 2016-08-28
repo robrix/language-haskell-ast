@@ -31,6 +31,7 @@ instance IsAST ModuleHead where
 
 instance IsAST WarningText
 instance IsAST ExportSpecList
+instance IsAST Namespace
 
 instance IsAST ExportSpec where
   toAST (EVar _ name) = toAST name
