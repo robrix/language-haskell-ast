@@ -1,7 +1,6 @@
 {-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, TypeOperators #-}
 module Main where
 
-import Data.List
 import Data.Maybe
 import Data.Monoid
 import GHC.Generics
