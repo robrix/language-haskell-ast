@@ -61,9 +61,7 @@ instance IsAST Annotation where
   toAST (TypeAnn l name e) = Branch l "type_annotation" [ toAST name{-, toAST e -} ]
   toAST (ModuleAnn l e) = Branch l "module_annotation" [ {- toAST e -} ]
 
-instance IsAST ImportDecl where
-  toAST (ImportDecl l m _ _ _ _ as importSpecList) = Branch l "import_declaration" $ toAST m : (toAST <$> maybeToList as) <> (toAST <$> maybeToList importSpecList)
-
+instance IsAST ImportDecl
 instance IsAST ImportSpecList
 instance IsAST ImportSpec
 
