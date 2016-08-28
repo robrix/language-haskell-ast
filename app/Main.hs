@@ -91,8 +91,8 @@ class IsAST t where
 class IsLocated t where
   location :: t SrcRange -> SrcRange
 
-class IsAST'' t where
-  toAST'' :: t SrcRange -> [AST String]
+class IsAST' t where
+  toAST' :: t SrcRange -> [AST String]
 
 toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
 toASTGeneric = toAST . from
@@ -112,17 +112,17 @@ instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0
   toAST m = Branch (location m) (conName m) $ fmap toAST . unK1 . unM1 . r . unM1 $ m
     where r (_ :*: r) = r
 
-instance (IsLocated l, IsAST'' g, IsAST'' h, Constructor c) => IsAST (C1 c (l :*: (g :*: h))) where
-  toAST m = case toAST'' (r (unM1 m)) of
+instance (IsLocated l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: (g :*: h))) where
+  toAST m = case toAST' (r (unM1 m)) of
     [ a ] | astRange a == location m -> a
     as -> Branch (location m) (conName m) as
     where r (_ :*: r) = r
 
-instance IsAST'' (M1 S c (K1 R v)) where
-  toAST'' m = []
+instance IsAST' (M1 S c (K1 R v)) where
+  toAST' m = []
 
-instance (IsAST'' f, IsAST'' g) => IsAST'' (f :*: g) where
-  toAST'' (f :*: g) = toAST'' f <> toAST'' g
+instance (IsAST' f, IsAST' g) => IsAST' (f :*: g) where
+  toAST' (f :*: g) = toAST' f <> toAST' g
 
 instance (IsAST f, IsAST g) => IsAST (f :+: g) where
   toAST (L1 l) = toAST l
