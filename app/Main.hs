@@ -84,6 +84,9 @@ instance (IsLocated f, IsAST f, Datatype c) => IsAST (M1 D c f) where
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 String)))) where
   toAST m = Leaf (location m) (conName m) $ unK1 . unM1 . r . unM1 $ m
 
+instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Int)))) where
+  toAST m = Branch (location m) (conName m) []
+
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
   toAST m = Branch (location m) (conName m) []
 
