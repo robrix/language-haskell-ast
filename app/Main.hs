@@ -114,6 +114,9 @@ class IsAST t where
   default toAST :: (Generic1 t, IsAST' (Rep1 t)) => t SrcRange -> AST String
   toAST = toASTGeneric
 
+class IsLocated t where
+  location :: t SrcRange -> SrcRange
+
 class IsAST' t where
   toAST' :: t SrcRange -> AST String
 
