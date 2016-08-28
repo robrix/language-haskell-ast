@@ -127,7 +127,7 @@ toASTGeneric :: (Generic (t SrcRange), IsAST' (Rep (t SrcRange))) => t SrcRange 
 toASTGeneric = toAST' . from
 
 instance (IsLocated f, IsAST' f, Datatype c) => IsAST' (M1 D c f) where
-  toAST' m = Branch (location m) (datatypeName m) [ toAST' (unM1 m) ]
+  toAST' m = toAST' (unM1 m)
 
 instance (IsLocated f, IsAST'' f, Constructor c) => IsAST' (M1 C c f) where
   toAST' m = Branch (location m) (conName m) (toAST'' (unM1 m))
