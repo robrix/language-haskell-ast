@@ -24,9 +24,7 @@ data AST a
   | Branch { astRange :: SrcRange, astName :: a, astChildren :: [AST a] }
   deriving (Eq, Show)
 
-instance IsAST Module where
-  toAST (Module l header pragmas imports _) = Branch l "program" $ (toAST <$> maybeToList header) <> (toAST <$> pragmas) <> (toAST <$> imports)
-
+instance IsAST Module
 instance IsAST ModuleHead
 instance IsAST WarningText
 instance IsAST ExportSpecList
