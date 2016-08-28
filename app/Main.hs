@@ -122,8 +122,26 @@ instance (IsLocated l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: 
     as -> Branch (location m) (conName m) as
     where r (_ :*: r) = r
 
-instance IsAST' (M1 S c (K1 R v)) where
-  toAST' m = []
+instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
+  toAST' = pure . toAST . unK1 . unM1
+
+instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 [v SrcRange])) where
+  toAST' = fmap toAST . unK1 . unM1
+
+instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe (v SrcRange)))) where
+  toAST' = fmap toAST . maybeToList . unK1 . unM1
+
+instance Selector s => IsAST' (S1 s (Rec0 String)) where
+  toAST' _ = []
+
+instance Selector s => IsAST' (S1 s (Rec0 Bool)) where
+  toAST' _ = []
+
+instance Selector s => IsAST' (S1 s (Rec0 (Maybe Tool))) where
+  toAST' _ = []
+
+instance Selector s => IsAST' (S1 s (Rec0 (Maybe String))) where
+  toAST' _ = []
 
 instance (IsAST' f, IsAST' g) => IsAST' (f :*: g) where
   toAST' (f :*: g) = toAST' f <> toAST' g
