@@ -48,9 +48,7 @@ instance IsAST QName where
     UnQual _ name -> pure (toAST name)
     Special _ c -> pure (toAST c)
 
-instance IsAST CName where
-  toAST (VarName _ name) = toAST name
-  toAST (ConName _ name) = toAST name
+instance IsAST CName
 
 instance IsAST SpecialCon where
   toAST (UnitCon l) = Leaf l "unit_constructor" "()"
