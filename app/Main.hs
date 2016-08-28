@@ -151,7 +151,7 @@ instance (IsAST f, IsAST g) => IsAST (f :+: g) where
   toAST (R1 r) = toAST r
 
 instance IsLocated f => IsLocated (f :*: g) where
-  location (l :*: _) = location l
+  location = location . l
 
 instance (IsLocated f, IsLocated g) => IsLocated (f :+: g) where
   location (L1 l) = location l
