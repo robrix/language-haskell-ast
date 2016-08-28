@@ -1,6 +1,8 @@
 {-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, TypeOperators #-}
 module Main where
 
+import Control.Monad
+import Data.Foldable
 import Data.Maybe
 import Data.Monoid
 import GHC.Generics
@@ -96,11 +98,8 @@ instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (v SrcRange))))) where
   toAST m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
 
-instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 [v SrcRange])))) where
-  toAST m = Branch (location m) (conName m) $ fmap toAST . unK1 . unM1 . r . unM1 $ m
-
-instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (Maybe (v SrcRange)))))) where
-  toAST m = Branch (location m) (conName m) $ fmap toAST . maybeToList . unK1 . unM1 . r . unM1 $ m
+instance (IsLocated l, Constructor c, IsAST v, Functor t, Foldable t) => IsAST (C1 c (l :*: (S1 s (Rec0 (t (v SrcRange)))))) where
+  toAST m = Branch (location m) (conName m) $ toList . fmap toAST . unK1 . unM1 . r . unM1 $ m
 
 instance (IsLocated l, IsAST' l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: (g :*: h))) where
   toAST m = case toAST' (unM1 m) of
