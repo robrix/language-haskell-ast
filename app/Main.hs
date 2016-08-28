@@ -135,3 +135,6 @@ instance IsLocated f => IsLocated (f :*: g) where
 instance (IsLocated f, IsLocated g) => IsLocated (f :+: g) where
   location (L1 l) = location l
   location (R1 r) = location r
+
+instance IsLocated f => IsLocated (M1 i c f) where
+  location = location . unM1
