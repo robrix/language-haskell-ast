@@ -25,6 +25,22 @@ data AST a
   | Branch { astRange :: SrcRange, astName :: a, astChildren :: [AST a] }
   deriving (Eq, Show)
 
+
+-- Typeclasses
+
+class IsAST t where
+  toAST :: t SrcRange -> AST String
+  default toAST :: (Generic (t SrcRange), IsAST (Rep (t SrcRange))) => t SrcRange -> AST String
+  toAST = toASTGeneric
+
+class IsLocated t where
+  location :: t SrcRange -> SrcRange
+
+class IsAST' t where
+  toAST' :: t SrcRange -> [AST String]
+  toAST' _ = []
+
+
 instance IsAST Module
 instance IsAST ModuleHead
 instance IsAST WarningText
@@ -118,18 +134,6 @@ instance Pretty (AST String) where
   pPrintPrec level n ast = parens $ text (astName ast) <+> (if level > prettyNormal then pPrintPrec level n (astRange ast) else mempty) <+> case ast of
     Leaf{..} -> text (show astContents)
     Branch{..} -> sep (pPrintPrec level n <$> astChildren)
-
-class IsAST t where
-  toAST :: t SrcRange -> AST String
-  default toAST :: (Generic (t SrcRange), IsAST (Rep (t SrcRange))) => t SrcRange -> AST String
-  toAST = toASTGeneric
-
-class IsLocated t where
-  location :: t SrcRange -> SrcRange
-
-class IsAST' t where
-  toAST' :: t SrcRange -> [AST String]
-  toAST' _ = []
 
 toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
 toASTGeneric = toAST . from
