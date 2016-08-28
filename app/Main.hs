@@ -99,6 +99,9 @@ instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 [v SrcRange])))) where
   toAST m = Branch (location m) (conName m) $ fmap toAST . unK1 . unM1 . r . unM1 $ m
 
+instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (Maybe (v SrcRange)))))) where
+  toAST m = Branch (location m) (conName m) $ fmap toAST . maybeToList . unK1 . unM1 . r . unM1 $ m
+
 instance (IsLocated l, IsAST' l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: (g :*: h))) where
   toAST m = case toAST' (unM1 m) of
     [ a ] | astRange a == location m -> a
