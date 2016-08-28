@@ -132,8 +132,9 @@ toASTGeneric = toAST' . from
 instance (IsLocated f, IsAST' f, Datatype c) => IsAST' (M1 D c f) where
   toAST' m = toAST' (unM1 m)
 
-instance (IsLocated f, IsAST'' f, Constructor c) => IsAST' (M1 C c f) where
-  toAST' m = Branch (location m) (conName m) (toAST'' (unM1 m))
+instance (IsLocated f, IsLeaf g, IsAST'' f, Constructor c) => IsAST' (M1 C c (f :*: g)) where
+  toAST' m = Leaf (location m) (conName m) (leaf (r (unM1 m)))
+    where r (_ :*: r) = r
 
 instance IsAST'' (M1 S c (K1 R v)) where
   toAST'' m = []
