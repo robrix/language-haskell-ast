@@ -66,11 +66,7 @@ instance IsAST ImportDecl where
 instance IsAST ImportSpecList where
   toAST (ImportSpecList l _ specs) = Branch l "import_specs" $ toAST <$> specs
 
-instance IsAST ImportSpec where
-  toAST (IVar _ name) = toAST name
-  toAST (IAbs _ _ name) = toAST name
-  toAST (IThingAll _ name) = toAST name
-  toAST (IThingWith l name names) = Branch l "import_spec" $ toAST name : (toAST <$> names)
+instance IsAST ImportSpec
 
 data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
   deriving (Eq)
