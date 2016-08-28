@@ -32,13 +32,7 @@ instance IsAST ModuleHead where
 instance IsAST WarningText
 instance IsAST ExportSpecList
 instance IsAST Namespace
-
-instance IsAST ExportSpec where
-  toAST (EVar _ name) = toAST name
-  toAST (EAbs _ _ name) = toAST name
-  toAST (EThingWith l _ name names) = Branch l "export_spec" $ toAST name : (toAST <$> names)
-  toAST (EModuleContents _ name) = toAST name
-
+instance IsAST ExportSpec
 instance IsAST QName
 instance IsAST CName
 
