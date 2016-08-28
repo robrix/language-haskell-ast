@@ -4,7 +4,7 @@ module Main where
 import Control.Monad
 import Data.Foldable
 import Data.Maybe
-import Data.Monoid
+import Data.Monoid hiding (Alt)
 import GHC.Generics
 import Language.Haskell.Exts hiding (Pretty)
 import Text.PrettyPrint.HughesPJClass hiding ((<>))
@@ -61,6 +61,42 @@ instance IsAST QOp
 instance IsAST Literal
 instance IsAST Sign
 instance IsAST Role
+instance IsAST ConDecl
+instance IsAST Decl
+instance IsAST PatternSynDirection
+instance IsAST RPat
+instance IsAST RPatOp
+instance IsAST FieldDecl
+instance IsAST PatField
+instance IsAST PXAttr
+instance IsAST Type
+instance IsAST Splice
+instance IsAST Promoted
+instance IsAST Context
+instance IsAST Asst
+instance IsAST Rule
+instance IsAST RuleVar
+instance IsAST Pat
+instance IsAST Deriving
+instance IsAST InstDecl
+instance IsAST InstRule
+instance IsAST InstHead
+instance IsAST QualConDecl
+instance IsAST TypeEqn
+instance IsAST GadtDecl
+instance IsAST Rhs
+instance IsAST GuardedRhs
+instance IsAST Stmt
+instance IsAST ClassDecl
+instance IsAST Binds
+instance IsAST IPBind
+instance IsAST Alt
+instance IsAST QualStmt
+instance IsAST Bracket
+instance IsAST FieldUpdate
+instance IsAST XAttr
+instance IsAST Exp
+instance IsAST Match
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
