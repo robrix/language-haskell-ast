@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, DeriveAnyClass, FlexibleContexts, FlexibleInstances, StandaloneDeriving #-}
+{-# LANGUAGE DefaultSignatures, DeriveAnyClass, FlexibleContexts, FlexibleInstances, StandaloneDeriving, TypeOperators #-}
 module Main where
 
 import Data.List
@@ -111,7 +111,7 @@ instance Pretty (AST String) where
 
 class IsAST t where
   toAST :: t SrcRange -> AST String
-  default toAST :: (Generic1 t, IsAST' (Rep1 t)) => t SrcRange -> AST String
+  default toAST :: (Generic (t SrcRange), IsAST' (Rep (t SrcRange))) => t SrcRange -> AST String
   toAST = toASTGeneric
 
 class IsLocated t where
@@ -123,11 +123,17 @@ class IsAST' t where
 class IsAST'' t where
   toAST'' :: t SrcRange -> [AST String]
 
-toASTGeneric :: (Generic1 t, IsAST' (Rep1 t)) => t SrcRange -> AST String
-toASTGeneric = toAST' . from1
+toASTGeneric :: (Generic (t SrcRange), IsAST' (Rep (t SrcRange))) => t SrcRange -> AST String
+toASTGeneric = toAST' . from
 
-instance IsAST' f => IsAST' (M1 i c f) where
-  toAST' = toAST' . unM1
+instance (IsLocated f, IsAST' f, Datatype c) => IsAST' (M1 D c f) where
+  toAST' m = Branch (location m) (datatypeName m) [ toAST' (unM1 m) ]
+
+instance (IsLocated f, IsAST'' f, Constructor c) => IsAST' (M1 C c f) where
+  toAST' m = Branch (location m) (conName m) (toAST'' (unM1 m))
+
+instance IsAST'' (M1 S c (K1 R v)) where
+  toAST'' m = []
 
 instance (IsAST'' f, IsAST'' g) => IsAST'' (f :*: g) where
   toAST'' (f :*: g) = toAST'' f <> toAST'' g
