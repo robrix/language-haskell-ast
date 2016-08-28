@@ -103,6 +103,9 @@ instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Stri
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Int)))) where
   toAST m = Branch (location m) (conName m) []
 
+instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Bool)))) where
+  toAST m = Branch (location m) (conName m) []
+
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
   toAST m = Branch (location m) (conName m) []
 
