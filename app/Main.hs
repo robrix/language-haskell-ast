@@ -17,7 +17,7 @@ main = do
   (verbose, path) <- execParser (info arguments (fullDesc <> progDesc "Haskell sources to AST s-exprs"))
   result <- parseFile path
   case result of
-    ParseOk m -> putStrLn $ "parse succeeded:\n" <> render (pPrintPrec (if verbose then PrettyLevel 1 else prettyNormal) 0 (toAST (spanToRange . srcInfoSpan <$> m)))
+    ParseOk m -> putStrLn $ render (pPrintPrec (if verbose then PrettyLevel 1 else prettyNormal) 0 (toAST (spanToRange . srcInfoSpan <$> m)))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST a
