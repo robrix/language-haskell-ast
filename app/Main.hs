@@ -20,10 +20,19 @@ main = do
     ParseOk m -> putStrLn $ render (pPrintPrec (if verbose then PrettyLevel 1 else prettyNormal) 0 (toAST (spanToRange . srcInfoSpan <$> m)))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
+
+-- Datatypes
+
 data AST a
   = Leaf { astRange :: SrcRange, astName :: a, astContents :: a }
   | Branch { astRange :: SrcRange, astName :: a, astChildren :: [AST a] }
   deriving (Eq, Show)
+
+data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
+  deriving (Eq)
+
+spanToRange :: SrcSpan -> SrcRange
+spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
 
 
 -- Typeclasses
@@ -116,12 +125,6 @@ instance IsAST Annotation
 instance IsAST ImportDecl
 instance IsAST ImportSpecList
 instance IsAST ImportSpec
-
-data SrcRange = SrcRange { srcRangeStartLine :: !Int, srcRangeStartColumn :: !Int, srcRangeEndLine :: !Int, srcRangeEndColumn :: !Int }
-  deriving (Eq)
-
-spanToRange :: SrcSpan -> SrcRange
-spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
 
 
 instance Show SrcRange where
