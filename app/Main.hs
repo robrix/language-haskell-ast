@@ -153,3 +153,6 @@ instance IsLocated f => IsLocated (M1 i c f) where
 
 instance IsLocated (K1 R SrcRange) where
   location = unK1
+
+instance IsLeaf (K1 R String) where
+  leaf = unK1
