@@ -149,6 +149,7 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe [v SrcRange]))) wher
 
 instance Selector s => IsAST' (S1 s (Rec0 SrcRange))
 instance Selector s => IsAST' (S1 s (Rec0 String))
+instance Selector s => IsAST' (S1 s (Rec0 Char))
 instance Selector s => IsAST' (S1 s (Rec0 Bool))
 instance Selector s => IsAST' (S1 s (Rec0 Int))
 instance Selector s => IsAST' (S1 s (Rec0 Integer))
