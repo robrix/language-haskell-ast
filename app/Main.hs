@@ -37,6 +37,7 @@ instance IsAST SpecialCon
 instance IsAST Name
 instance IsAST ModuleName
 instance IsAST ModulePragma
+instance IsAST TyVarBind
 instance IsAST Kind
 
 instance IsAST Annotation where
