@@ -131,3 +131,7 @@ instance IsAST' f => IsAST' (M1 i c f) where
 
 instance IsLocated f => IsLocated (f :*: g) where
   location (l :*: _) = location l
+
+instance (IsLocated f, IsLocated g) => IsLocated (f :+: g) where
+  location (L1 l) = location l
+  location (R1 r) = location r
