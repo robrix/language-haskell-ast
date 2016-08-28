@@ -62,10 +62,7 @@ instance IsAST SpecialCon where
   toAST (Cons l) = Leaf l "list_data_constructor" ":"
   toAST (UnboxedSingleCon l) = Leaf l "unboxed_singleton_tuple_constructor" "(# #)"
 
-instance IsAST Name where
-  toAST (Ident l s) = Leaf l "identifier" s
-  toAST (Symbol l s) = Leaf l "symbol" s
-
+instance IsAST Name
 instance IsAST ModuleName
 
 instance IsAST ModulePragma where
