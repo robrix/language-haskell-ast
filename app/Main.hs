@@ -16,7 +16,7 @@ main :: IO ()
 main = do
   result <- parseFile path
   case result of
-    ParseOk m -> putStrLn $ "parse succeeded: " <> show (toAST (spanToRange . srcInfoSpan <$> m))
+    ParseOk m -> putStrLn $ "parse succeeded:\n" <> render (pPrint (toAST (spanToRange . srcInfoSpan <$> m)))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST a
