@@ -9,15 +9,15 @@ import Language.Haskell.Exts hiding (Pretty)
 import Options.Applicative
 import Text.PrettyPrint.HughesPJClass hiding ((<>))
 
-arguments :: Parser FilePath
-arguments = helper <*> strArgument (metavar "FILE")
+arguments :: Parser (Bool, FilePath)
+arguments = helper <*> ((,) <$> switch (long "verbose" <> short 'v' <> help "show verbose output, including source ranges") <*> strArgument (metavar "FILE"))
 
 main :: IO ()
 main = do
-  path <- execParser (info arguments (fullDesc <> progDesc "Haskell sources to AST s-exprs"))
+  (verbose, path) <- execParser (info arguments (fullDesc <> progDesc "Haskell sources to AST s-exprs"))
   result <- parseFile path
   case result of
-    ParseOk m -> putStrLn $ "parse succeeded:\n" <> render (pPrint (toAST (spanToRange . srcInfoSpan <$> m)))
+    ParseOk m -> putStrLn $ "parse succeeded:\n" <> render (pPrintPrec (if verbose then PrettyLevel 1 else prettyNormal) 0 (toAST (spanToRange . srcInfoSpan <$> m)))
     ParseFailed loc reason -> putStrLn $ "parse failed at " <> show loc <> " because " <> reason
 
 data AST a
