@@ -118,6 +118,9 @@ instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 Bool
 instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
   toAST m = Branch (location m) (conName m) []
 
+instance Constructor c => IsAST (C1 c U1) where
+  toAST m = Branch (location m) (conName m) []
+
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (v SrcRange))))) where
   toAST m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
 
@@ -183,3 +186,6 @@ instance IsLocated f => IsLocated (M1 i c f) where
 
 instance IsLocated (K1 R SrcRange) where
   location = unK1
+
+instance IsLocated U1 where
+  location _ = SrcRange 0 0 0 0
