@@ -56,6 +56,7 @@ instance IsAST Safety
 instance IsAST Overlap
 instance IsAST FunDep
 instance IsAST Activation
+instance IsAST Assoc
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
