@@ -1,13 +1,14 @@
 {-# LANGUAGE DefaultSignatures, DeriveAnyClass, FlexibleContexts, FlexibleInstances, StandaloneDeriving #-}
 module Main where
 
-import Data.Monoid
-import GHC.Generics
-import Language.Haskell.Exts
-import Language.Haskell.Exts.SrcLoc
-import Language.Haskell.Exts.Syntax
 import Data.List
 import Data.Maybe
+import Data.Monoid
+import GHC.Generics
+import Language.Haskell.Exts hiding (Pretty)
+import Language.Haskell.Exts.SrcLoc
+import Language.Haskell.Exts.Syntax
+import Text.PrettyPrint.HughesPJClass hiding ((<>))
 
 path = "/Users/rob/Developer/Projects/language-haskell-ast/app/Main.hs"
 
@@ -100,6 +101,9 @@ spanToRange (SrcSpan _ sl sc el ec) = SrcRange sl sc el ec
 
 instance Show SrcRange where
   showsPrec _ (SrcRange sl sc el ec) = showParen True $ shows sl . showString ":" . shows sc . showString "-" . shows el . showString ":" . shows ec
+
+instance Pretty SrcRange where
+  pPrint (SrcRange sl sc el ec) = text $ "[" <> show sl <> ":" <> show sc <> "-" <> show el <> ":" <> show ec <> "]"
 
 class IsAST t where
   toAST :: t SrcRange -> AST String
