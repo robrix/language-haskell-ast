@@ -158,3 +158,6 @@ instance IsLeaf (K1 R String) where
 
 instance IsLeaf f => IsLeaf (M1 S c f) where
   leaf = leaf . unM1
+
+instance IsLeaf g => IsLeaf (f :*: g) where
+  leaf (_ :*: g) = leaf g
