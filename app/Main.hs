@@ -112,9 +112,6 @@ class IsAST t where
 class IsLocated t where
   location :: t SrcRange -> SrcRange
 
-class IsLeaf t where
-  leaf :: t a -> String
-
 class IsAST' t where
   toAST' :: t SrcRange -> AST String
 
@@ -127,8 +124,8 @@ toASTGeneric = toAST' . from
 instance (IsLocated f, IsAST' f, Datatype c) => IsAST' (M1 D c f) where
   toAST' m = toAST' (unM1 m)
 
-instance (IsLocated f, IsLeaf f, IsAST'' f, Constructor c) => IsAST' (M1 C c f) where
-  toAST' m = Leaf (location m) (conName m) (leaf (unM1 m))
+instance (IsLocated f, IsAST'' f, Constructor c) => IsAST' (M1 C c f) where
+  toAST' m = Branch (location m) (conName m) (toAST'' (unM1 m))
 
 instance IsAST'' (M1 S c (K1 R v)) where
   toAST'' m = []
@@ -152,12 +149,3 @@ instance IsLocated f => IsLocated (M1 i c f) where
 
 instance IsLocated (K1 R SrcRange) where
   location = unK1
-
-instance IsLeaf (K1 R String) where
-  leaf = unK1
-
-instance IsLeaf f => IsLeaf (M1 S c f) where
-  leaf = leaf . unM1
-
-instance IsLeaf g => IsLeaf (f :*: g) where
-  leaf (_ :*: g) = leaf g
