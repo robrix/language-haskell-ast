@@ -115,7 +115,7 @@ class IsAST t where
   toAST = toASTGeneric
 
 class IsAST' t where
-  toAST' :: t a -> AST String
+  toAST' :: t SrcRange -> AST String
 
 toASTGeneric :: (Generic1 t, IsAST' (Rep1 t)) => t SrcRange -> AST String
 toASTGeneric = toAST' . from1
