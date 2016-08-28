@@ -36,16 +36,7 @@ instance IsAST ExportSpec
 instance IsAST QName
 instance IsAST CName
 
-instance IsAST SpecialCon where
-  toAST (UnitCon l) = Leaf l "unit_constructor" "()"
-  toAST (ListCon l) = Leaf l "list_type_constructor" "[]"
-  toAST (FunCon l) = Leaf l "function_type_constructor" "->"
-  toAST (TupleCon l boxed n) = Leaf l "tuple_constructor" $ intercalate "," $ replicate n $ case boxed of
-    Boxed -> "#"
-    Unboxed -> ""
-  toAST (Cons l) = Leaf l "list_data_constructor" ":"
-  toAST (UnboxedSingleCon l) = Leaf l "unboxed_singleton_tuple_constructor" "(# #)"
-
+instance IsAST SpecialCon
 instance IsAST Name
 instance IsAST ModuleName
 instance IsAST ModulePragma
@@ -131,6 +122,8 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe (v SrcRange)))) wher
 
 instance Selector s => IsAST' (S1 s (Rec0 String))
 instance Selector s => IsAST' (S1 s (Rec0 Bool))
+instance Selector s => IsAST' (S1 s (Rec0 Int))
+instance Selector s => IsAST' (S1 s (Rec0 Boxed))
 instance Selector s => IsAST' (S1 s (Rec0 (Maybe Tool)))
 instance Selector s => IsAST' (S1 s (Rec0 (Maybe String)))
 
