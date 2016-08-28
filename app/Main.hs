@@ -128,3 +128,6 @@ toASTGeneric = toAST' . from1
 
 instance IsAST' f => IsAST' (M1 i c f) where
   toAST' = toAST' . unM1
+
+instance IsLocated f => IsLocated (f :*: g) where
+  location (l :*: _) = location l
