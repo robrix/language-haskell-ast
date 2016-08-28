@@ -66,8 +66,7 @@ instance IsAST Name where
   toAST (Ident l s) = Leaf l "identifier" s
   toAST (Symbol l s) = Leaf l "symbol" s
 
-instance IsAST ModuleName where
-  toAST (ModuleName l s) = Leaf l "identifier" s
+instance IsAST ModuleName
 
 instance IsAST ModulePragma where
   toAST (LanguagePragma l names) = Branch l "language_pragma" $ toAST <$> names
