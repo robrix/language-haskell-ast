@@ -33,7 +33,6 @@ instance IsAST Namespace
 instance IsAST ExportSpec
 instance IsAST QName
 instance IsAST CName
-
 instance IsAST SpecialCon
 instance IsAST Name
 instance IsAST ModuleName
