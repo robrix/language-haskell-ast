@@ -119,6 +119,9 @@ instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange))) where
 instance (IsLocated l, Constructor c, IsAST v) => IsAST (C1 c (l :*: (S1 t (Rec0 (v SrcRange))))) where
   toAST m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
 
+instance (IsLocated l, Constructor c, IsAST v, Functor t, Foldable t, Functor u, Foldable u) => IsAST (C1 c (l :*: (S1 s (Rec0 (t (u (v SrcRange), a)))))) where
+  toAST m = Branch (location m) (conName m) $ join . toList . fmap (toList . fmap toAST . fst) . unK1 . unM1 . r . unM1 $ m
+
 instance (IsLocated l, Constructor c, IsAST v, Functor t, Foldable t) => IsAST (C1 c (l :*: (S1 s (Rec0 (t (v SrcRange)))))) where
   toAST m = Branch (location m) (conName m) $ toList . fmap toAST . unK1 . unM1 . r . unM1 $ m
 
@@ -141,6 +144,9 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
 
 instance (IsAST v, Selector s, Functor t, Foldable t) => IsAST' (S1 s (Rec0 (t (v SrcRange)))) where
   toAST' = toList . fmap toAST . unK1 . unM1
+
+instance (IsAST v, Selector s, Functor t, Foldable t, Functor u, Foldable u) => IsAST' (S1 s (Rec0 (t (u (v SrcRange), a)))) where
+  toAST' = join . toList . fmap (toList . fmap toAST . fst) . unK1 . unM1
 
 instance (IsAST v, Selector s, Functor t, Foldable t, Functor u, Foldable u) => IsAST' (S1 s (Rec0 (t (u (v SrcRange))))) where
   toAST' = join . toList . fmap (toList . fmap toAST) . unK1 . unM1
