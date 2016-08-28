@@ -97,34 +97,31 @@ instance Pretty (AST String) where
 
 class IsAST t where
   toAST :: t SrcRange -> AST String
-  default toAST :: (Generic (t SrcRange), IsAST' (Rep (t SrcRange))) => t SrcRange -> AST String
+  default toAST :: (Generic (t SrcRange), IsAST (Rep (t SrcRange))) => t SrcRange -> AST String
   toAST = toASTGeneric
 
 class IsLocated t where
   location :: t SrcRange -> SrcRange
 
-class IsAST' t where
-  toAST' :: t SrcRange -> AST String
-
 class IsAST'' t where
   toAST'' :: t SrcRange -> [AST String]
 
-toASTGeneric :: (Generic (t SrcRange), IsAST' (Rep (t SrcRange))) => t SrcRange -> AST String
-toASTGeneric = toAST' . from
+toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
+toASTGeneric = toAST . from
 
-instance (IsLocated f, IsAST' f, Datatype c) => IsAST' (M1 D c f) where
-  toAST' m = toAST' (unM1 m)
+instance (IsLocated f, IsAST f, Datatype c) => IsAST (M1 D c f) where
+  toAST = toAST . unM1
 
-instance Constructor c => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 String)))) where
-  toAST' m = Leaf (location m) (conName m) $ unK1 . unM1 . r . unM1 $ m
+instance Constructor c => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 String)))) where
+  toAST m = Leaf (location m) (conName m) $ unK1 . unM1 . r . unM1 $ m
     where r (_ :*: r) = r
 
-instance (Constructor c, IsAST v) => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 (v SrcRange))))) where
-  toAST' m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
+instance (Constructor c, IsAST v) => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (S1 t (Rec0 (v SrcRange))))) where
+  toAST m = Branch (location m) (conName m) $ pure . toAST . unK1 . unM1 . r . unM1 $ m
     where r (_ :*: r) = r
 
-instance (IsAST'' g, IsAST'' h, Constructor c) => IsAST' (C1 c (S1 s (Rec0 SrcRange) :*: (g :*: h))) where
-  toAST' m = case toAST'' (r (unM1 m)) of
+instance (IsAST'' g, IsAST'' h, Constructor c) => IsAST (C1 c (S1 s (Rec0 SrcRange) :*: (g :*: h))) where
+  toAST m = case toAST'' (r (unM1 m)) of
     [ a ] | astRange a == location m -> a
     as -> Branch (location m) (conName m) as
     where r (_ :*: r) = r
@@ -135,9 +132,9 @@ instance IsAST'' (M1 S c (K1 R v)) where
 instance (IsAST'' f, IsAST'' g) => IsAST'' (f :*: g) where
   toAST'' (f :*: g) = toAST'' f <> toAST'' g
 
-instance (IsAST' f, IsAST' g) => IsAST' (f :+: g) where
-  toAST' (L1 l) = toAST' l
-  toAST' (R1 r) = toAST' r
+instance (IsAST f, IsAST g) => IsAST (f :+: g) where
+  toAST (L1 l) = toAST l
+  toAST (R1 r) = toAST r
 
 instance IsLocated f => IsLocated (f :*: g) where
   location (l :*: _) = location l
