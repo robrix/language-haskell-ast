@@ -122,6 +122,9 @@ instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 [v SrcRange])) where
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe (v SrcRange)))) where
   toAST' = fmap toAST . maybeToList . unK1 . unM1
 
+instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe [v SrcRange]))) where
+  toAST' = fmap toAST . join . maybeToList . unK1 . unM1
+
 instance Selector s => IsAST' (S1 s (Rec0 SrcRange))
 instance Selector s => IsAST' (S1 s (Rec0 String))
 instance Selector s => IsAST' (S1 s (Rec0 Bool))
