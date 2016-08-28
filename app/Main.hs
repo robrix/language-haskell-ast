@@ -51,6 +51,9 @@ class IsAST t where
   default toAST :: (Generic (t SrcRange), IsAST (Rep (t SrcRange))) => t SrcRange -> AST String
   toAST = toASTGeneric
 
+toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
+toASTGeneric = toAST . from
+
 class IsLocated t where
   location :: t SrcRange -> SrcRange
 
@@ -148,9 +151,6 @@ instance Pretty (AST String) where
   pPrintPrec level n ast = parens $ text (astName ast) <+> (if level > prettyNormal then pPrintPrec level n (astRange ast) else mempty) <+> case ast of
     Leaf{..} -> text (show astContents)
     Branch{..} -> sep (pPrintPrec level n <$> astChildren)
-
-toASTGeneric :: (Generic t, IsAST (Rep t)) => t -> AST String
-toASTGeneric = toAST . from
 
 instance (IsLocated f, IsAST f, Datatype c) => IsAST (M1 D c f) where
   toAST = toAST . unM1
