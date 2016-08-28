@@ -23,6 +23,7 @@ executable language-haskell-ast-exe
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+                       -Wall -fno-warn-name-shadowing
   build-depends:       base
                      , haskell-src-exts
                      , pretty
