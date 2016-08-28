@@ -138,3 +138,6 @@ instance (IsLocated f, IsLocated g) => IsLocated (f :+: g) where
 
 instance IsLocated f => IsLocated (M1 i c f) where
   location = location . unM1
+
+instance IsLocated (K1 R SrcRange) where
+  location = unK1
