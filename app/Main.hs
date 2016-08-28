@@ -97,12 +97,7 @@ instance IsAST FieldUpdate
 instance IsAST XAttr
 instance IsAST Exp
 instance IsAST Match
-
-instance IsAST Annotation where
-  toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
-  toAST (TypeAnn l name e) = Branch l "type_annotation" [ toAST name{-, toAST e -} ]
-  toAST (ModuleAnn l e) = Branch l "module_annotation" [ {- toAST e -} ]
-
+instance IsAST Annotation
 instance IsAST ImportDecl
 instance IsAST ImportSpecList
 instance IsAST ImportSpec
