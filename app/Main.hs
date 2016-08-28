@@ -117,6 +117,9 @@ class IsAST t where
 class IsLocated t where
   location :: t SrcRange -> SrcRange
 
+class IsLeaf t where
+  leaf :: t a -> String
+
 class IsAST' t where
   toAST' :: t SrcRange -> AST String
 
