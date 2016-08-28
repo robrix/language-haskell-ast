@@ -30,9 +30,7 @@ instance IsAST ModuleHead where
   toAST (ModuleHead l name warning exportSpecList) = Branch l "module_head" $ toAST name : (toAST <$> maybeToList warning) <> (toAST <$> maybeToList exportSpecList)
 
 instance IsAST WarningText
-
-instance IsAST ExportSpecList where
-  toAST (ExportSpecList l specs) = Branch l "export_specs" $ toAST <$> specs
+instance IsAST ExportSpecList
 
 instance IsAST ExportSpec where
   toAST (EVar _ name) = toAST name
