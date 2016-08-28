@@ -139,11 +139,8 @@ inlr f g s = case s of { L1 l -> f l ; R1 r -> g r }
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
   toAST' = pure . toAST . unK1 . unM1
 
-instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 [v SrcRange])) where
-  toAST' = fmap toAST . unK1 . unM1
-
-instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe (v SrcRange)))) where
-  toAST' = fmap toAST . maybeToList . unK1 . unM1
+instance (IsAST v, Selector s, Functor t, Foldable t) => IsAST' (S1 s (Rec0 (t (v SrcRange)))) where
+  toAST' = toList . fmap toAST . unK1 . unM1
 
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (Maybe [v SrcRange]))) where
   toAST' = fmap toAST . join . maybeToList . unK1 . unM1
