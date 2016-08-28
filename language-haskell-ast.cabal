@@ -26,6 +26,7 @@ executable language-haskell-ast-exe
                        -Wall -fno-warn-name-shadowing
   build-depends:       base
                      , haskell-src-exts
+                     , optparse-applicative
                      , pretty
   default-language:    Haskell2010
 

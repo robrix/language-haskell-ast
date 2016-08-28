@@ -6,13 +6,15 @@ import Data.Foldable
 import Data.Monoid hiding (Alt)
 import GHC.Generics
 import Language.Haskell.Exts hiding (Pretty)
+import Options.Applicative
 import Text.PrettyPrint.HughesPJClass hiding ((<>))
 
-path :: String
-path = "/Users/rob/Developer/Projects/language-haskell-ast/app/Main.hs"
+arguments :: Parser FilePath
+arguments = helper <*> strArgument (metavar "FILE")
 
 main :: IO ()
 main = do
+  path <- execParser (info arguments (fullDesc <> progDesc "Haskell sources to AST s-exprs"))
   result <- parseFile path
   case result of
     ParseOk m -> putStrLn $ "parse succeeded:\n" <> render (pPrint (toAST (spanToRange . srcInfoSpan <$> m)))
