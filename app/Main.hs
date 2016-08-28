@@ -139,6 +139,10 @@ instance IsAST'' (M1 S c (K1 R v)) where
 instance (IsAST'' f, IsAST'' g) => IsAST'' (f :*: g) where
   toAST'' (f :*: g) = toAST'' f <> toAST'' g
 
+instance (IsAST' f, IsAST' g) => IsAST' (f :+: g) where
+  toAST' (L1 l) = toAST' l
+  toAST' (R1 r) = toAST' r
+
 instance IsLocated f => IsLocated (f :*: g) where
   location (l :*: _) = location l
 
