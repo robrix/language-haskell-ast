@@ -116,6 +116,9 @@ instance (IsLocated l, IsAST' g, IsAST' h, Constructor c) => IsAST (C1 c (l :*: 
     [ a ] | astRange a == location m -> a
     as -> Branch (location m) (conName m) as
 
+l :: (l :*: r) a -> l a
+l (l :*: _) = l
+
 r :: (l :*: r) a -> r a
 r (_ :*: r) = r
 
