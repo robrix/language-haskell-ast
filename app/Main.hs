@@ -42,12 +42,7 @@ instance IsAST ExportSpec where
   toAST (EThingWith l _ name names) = Branch l "export_spec" $ toAST name : (toAST <$> names)
   toAST (EModuleContents _ name) = toAST name
 
-instance IsAST QName where
-  toAST q = Branch (ann q) "qualified" $ case q of
-    Qual _ moduleName name -> [ toAST moduleName, toAST name ]
-    UnQual _ name -> pure (toAST name)
-    Special _ c -> pure (toAST c)
-
+instance IsAST QName
 instance IsAST CName
 
 instance IsAST SpecialCon where
