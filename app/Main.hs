@@ -1,4 +1,4 @@
-{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, TypeOperators #-}
+{-# LANGUAGE DefaultSignatures, FlexibleContexts, FlexibleInstances, RecordWildCards, TypeOperators #-}
 module Main where
 
 import Control.Monad
@@ -116,8 +116,8 @@ instance Pretty SrcRange where
 
 instance Pretty (AST String) where
   pPrint ast = case ast of
-    Leaf l name contents -> parens $ text name <+> pPrint l <+> text (show contents)
-    Branch l name children -> parens $ text name <+> pPrint l <+> sep (pPrint <$> children)
+    Leaf{..} -> parens $ text astName <+> pPrint astRange <+> text (show astContents)
+    Branch{..} -> parens $ text astName <+> pPrint astRange <+> sep (pPrint <$> astChildren)
 
 class IsAST t where
   toAST :: t SrcRange -> AST String
