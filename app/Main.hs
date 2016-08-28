@@ -122,6 +122,9 @@ l (l :*: _) = l
 r :: (l :*: r) a -> r a
 r (_ :*: r) = r
 
+inlr :: (l a -> b) -> (r a -> b) -> (l :+: r) a -> b
+inlr f g s = case s of { L1 l -> f l ; R1 r -> g r }
+
 instance (IsAST v, Selector s) => IsAST' (S1 s (Rec0 (v SrcRange))) where
   toAST' = pure . toAST . unK1 . unM1
 
@@ -147,15 +150,13 @@ instance (IsAST' f, IsAST' g) => IsAST' (f :*: g) where
   toAST' (f :*: g) = toAST' f <> toAST' g
 
 instance (IsAST f, IsAST g) => IsAST (f :+: g) where
-  toAST (L1 l) = toAST l
-  toAST (R1 r) = toAST r
+  toAST = inlr toAST toAST
 
 instance IsLocated f => IsLocated (f :*: g) where
   location = location . l
 
 instance (IsLocated f, IsLocated g) => IsLocated (f :+: g) where
-  location (L1 l) = location l
-  location (R1 r) = location r
+  location = inlr location location
 
 instance IsLocated f => IsLocated (M1 i c f) where
   location = location . unM1
