@@ -26,9 +26,7 @@ data AST a
 instance IsAST Module where
   toAST (Module l header pragmas imports _) = Branch l "program" $ (toAST <$> maybeToList header) <> (toAST <$> pragmas) <> (toAST <$> imports)
 
-instance IsAST ModuleHead where
-  toAST (ModuleHead l name warning exportSpecList) = Branch l "module_head" $ toAST name : (toAST <$> maybeToList warning) <> (toAST <$> maybeToList exportSpecList)
-
+instance IsAST ModuleHead
 instance IsAST WarningText
 instance IsAST ExportSpecList
 instance IsAST Namespace
