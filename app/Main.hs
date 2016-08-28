@@ -37,6 +37,7 @@ instance IsAST SpecialCon
 instance IsAST Name
 instance IsAST ModuleName
 instance IsAST ModulePragma
+instance IsAST Kind
 
 instance IsAST Annotation where
   toAST (Ann l name e) = Branch l "expression_annotation" [ toAST name{-, toAST e -} ]
