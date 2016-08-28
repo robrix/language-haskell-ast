@@ -3,7 +3,6 @@ module Main where
 
 import Control.Monad
 import Data.Foldable
-import Data.Maybe
 import Data.Monoid hiding (Alt)
 import GHC.Generics
 import Language.Haskell.Exts hiding (Pretty)
